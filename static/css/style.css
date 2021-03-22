@@ -14,8 +14,12 @@ td {
     text-align: center;
 }
 td.finished {
+    background: #C4D9C3;
+}
+td.isnotfinished {
     background: #F1C8D6;
 }
 caption {
      caption-side: top;
+     font-weight: bold;
 }

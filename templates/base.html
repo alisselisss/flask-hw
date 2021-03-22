@@ -27,9 +27,6 @@
     <h4>i na marse budut yabloni cvesti!</h4>
     <main role="main" class="container">
         {% block content %}{% endblock %}
-        {% if current_user.is_authenticated %}
-            <a href="add_job" class="btn btn-secondary">Добавить новость</a>
-        {% endif %}
     </main>
 </body>
 </html>
