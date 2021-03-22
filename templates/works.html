@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Works log</h1>
+{% for job in job_session %}
+    <table>
+        <caption>Action # {{ job.id }}</caption>
+        <tr>
+            <th>title of activity</th>
+            <th>team leader</th>
+            <th>duration</th>
+            <th>list of collaborators</th>
+            <th>is finished</th>
+        </tr>
+        <tr>
+            <td>{{ job.job }}</td>
+            <td>{{ user_session.filter(us.id == job.team_leader).first() }}</td>
+            <td>{{ job.work_size }} hours</td>
+            <td>{{ job.collaborators }}</td>
+            <td class="finished">{{ 'is finished ' if job.is_finished else 'is not finished'}}</td>
+        </tr>
+    </table>
+{% endfor %}
+
+{% endblock %}

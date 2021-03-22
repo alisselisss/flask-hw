@@ -1,0 +1,21 @@
+table {
+    border-spacing: 0 10px;
+}
+th {
+    padding: 10px 20px;
+    background: #B4B5C2;
+    font-size: 0.9em;
+}
+td {
+    background: #D8D9E8;
+    vertical-align: middle;
+    padding: 10px;
+    font-size: 14px;
+    text-align: center;
+}
+td.finished {
+    background: #F1C8D6;
+}
+caption {
+     caption-side: top;
+}
