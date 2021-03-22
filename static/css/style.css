@@ -18,4 +18,5 @@ td.finished {
 }
 caption {
      caption-side: top;
+     font-weight: bold;
 }

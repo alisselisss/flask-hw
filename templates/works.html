@@ -20,6 +20,23 @@
             <td class="finished">{{ 'is finished ' if job.is_finished else 'is not finished'}}</td>
         </tr>
     </table>
+    <caption>
+        Author - {{ job.creator.name + ' ' + job.creator.surname }}, Date of writing - {{ job.start_date }}
+    </caption><br>
+    {% if current_user.is_authenticated and current_user == job.creator %}
+        <div>
+            <a href="/add_job/{{ job.id }}" class="btn btn-warning">
+                Edit
+            </a>
+            <a href="/job_delete/{{ job.id }}" class="btn btn-danger">
+                Delete
+            </a>
+        </div><br>
+    {% endif %}
 {% endfor %}
+
+{% if current_user.is_authenticated %}
+    <a href="add_job" class="btn btn-secondary">Добавить новость</a>
+{% endif %}
 
 {% endblock %}
