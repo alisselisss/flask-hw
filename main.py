@@ -1,6 +1,6 @@
 from flask import Flask, render_template, url_for
 from werkzeug.utils import redirect
-from flask_login import LoginManager, login_user
+from flask_login import LoginManager, login_user, login_required, logout_user
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from data import db_session
@@ -23,6 +23,12 @@ def index():
     return render_template('works.html', title='works log', job_session=db_sess.query(Jobs),
                            user_session=db_sess.query(User), us=User,
                            css_file=url_for('static', filename='css/style.css'))
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
 
 
 @app.route('/register', methods=['GET', 'POST'])
