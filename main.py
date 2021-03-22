@@ -8,6 +8,7 @@ from data.jobs import Jobs
 from data.users import User
 from forms.LoginForm import LoginForm
 from forms.RegisterForm import RegisterForm
+from forms.WorksForm import WorksForm
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -58,6 +59,26 @@ def reqister():
         db_sess.commit()
         return redirect('/login')
     return render_template('register.html', title='Register Form', form=form)
+
+
+@app.route('/add_job',  methods=['GET', 'POST'])
+@login_required
+def add_news():
+    form = WorksForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        job = Jobs(
+            team_leader=form.team_leader.data,
+            job=form.job.data,
+            work_size=form.work_size.data,
+            collaborators=form.collaborators.data,
+            is_finished=form.is_finished.data
+        )
+        db_sess.add(job)
+        db_sess.commit()
+        return redirect('/')
+    return render_template('add_job.html', title='Add work',
+                           form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
