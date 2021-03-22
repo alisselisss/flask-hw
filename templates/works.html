@@ -21,7 +21,7 @@
         </tr>
     </table>
     <caption>
-        Author - {{ job.creator.name + ' ' + job.creator.surname }}, Date of writing - {{ job.start_date }}
+        Author - , Date of writing - {{ job.start_date }}
     </caption><br>
     {% if current_user.is_authenticated and current_user == job.creator %}
         <div>
