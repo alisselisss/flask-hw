@@ -1,13 +1,17 @@
 from flask import Flask, render_template, url_for
 from werkzeug.utils import redirect
+from flask_login import LoginManager, login_user
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from data import db_session
 from data.jobs import Jobs
 from data.users import User
+from forms.LoginForm import LoginForm
 from forms.RegisterForm import RegisterForm
 
 app = Flask(__name__)
+login_manager = LoginManager()
+login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
 
@@ -28,12 +32,12 @@ def reqister():
         if form.password.data != form.password_again.data:
             return render_template('register.html', title='Регистрация',
                                    form=form,
-                                   message="Пароли не совпадают")
+                                   message="Password mismatch")
         db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == form.email.data).first():
             return render_template('register.html', title='Регистрация',
                                    form=form,
-                                   message="Такой пользователь уже есть")
+                                   message="This user already exists")
         user = User(
             surname=form.surname.data,
             name=form.name.data,
@@ -50,9 +54,25 @@ def reqister():
     return render_template('register.html', title='Register Form', form=form)
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template('base.html', title='')
+    form = LoginForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(User.email == form.email.data).first()
+        if user and user.check_password(form.password.data):
+            login_user(user, remember=form.remember_me.data)
+            return redirect("/")
+        return render_template('login.html',
+                               message="Incorrect login or password",
+                               form=form)
+    return render_template('login.html', title='Authorization', form=form)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    db_sess = db_session.create_session()
+    return db_sess.query(User).get(user_id)
 
 
 def main():
