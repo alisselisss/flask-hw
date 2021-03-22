@@ -21,12 +21,14 @@ app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
 @app.route('/add_job/<int:id>', methods=['GET', 'POST'])
 @login_required
-def edit_news(id):
+def edit_job(id):
     form = WorksForm()
     if request.method == "GET":
         db_sess = db_session.create_session()
         job = db_sess.query(Jobs).filter(Jobs.id == id,
-                                         Jobs.creator == current_user
+                                         Jobs.creator == current_user.id |
+                                         current_user.id == 1 |
+                                         current_user.id == Jobs.team_leader
                                          ).first()
         if job:
             form.team_leader.data = job.team_leader
@@ -39,7 +41,9 @@ def edit_news(id):
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         job = db_sess.query(Jobs).filter(Jobs.id == id,
-                                         Jobs.creator == current_user
+                                         Jobs.creator == current_user.id |
+                                         current_user.id == 1 |
+                                         current_user.id == Jobs.team_leader
                                          ).first()
         if job:
             job.team_leader = form.team_leader.data
@@ -72,7 +76,9 @@ def index():
 def job_delete(id):
     db_sess = db_session.create_session()
     job = db_sess.query(Jobs).filter(Jobs.id == id,
-                                     Jobs.creator == current_user
+                                     Jobs.creator == current_user.id |
+                                     current_user.id == 1 |
+                                     current_user.id == Jobs.team_leader
                                      ).first()
     if job:
         db_sess.delete(job)
@@ -120,7 +126,7 @@ def reqister():
 
 @app.route('/add_job', methods=['GET', 'POST'])
 @login_required
-def add_news():
+def add_job():
     form = WorksForm()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
@@ -129,7 +135,8 @@ def add_news():
             job=form.job.data,
             work_size=form.work_size.data,
             collaborators=form.collaborators.data,
-            is_finished=form.is_finished.data
+            is_finished=form.is_finished.data,
+            creator=current_user.id
         )
         db_sess.add(job)
         db_sess.commit()

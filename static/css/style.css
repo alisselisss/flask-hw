@@ -23,3 +23,11 @@ caption {
      caption-side: top;
      font-weight: bold;
 }
+.btn-warning {
+    background: #fff0c7;
+    border: 1 px solid #ffffc2;
+}
+.btn-danger {
+    background: #e37dac;
+    border: 1 px solid #e37fad;
+}

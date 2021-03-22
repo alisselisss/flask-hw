@@ -2,7 +2,6 @@ import datetime
 
 import sqlalchemy
 from flask_login import current_user
-from sqlalchemy import orm
 
 from data.db_session import SqlAlchemyBase
 
@@ -20,4 +19,4 @@ class Jobs(SqlAlchemyBase):
     end_date = sqlalchemy.Column(sqlalchemy.DateTime, nullable=True)
     is_finished = sqlalchemy.Column(sqlalchemy.Boolean, nullable=True)
 
-    creator = current_user
+    creator = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
